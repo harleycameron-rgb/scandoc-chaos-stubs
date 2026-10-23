@@ -1,0 +1,10 @@
+{
+  "status": "dormant",
+  "hooks": [
+    {
+      "id": "future_decode_v0",
+      "enabled": false,
+      "description": "Reserved entry point for a future decode module. Do not enable without an explicit contract revision."
+    }
+  ]
+}

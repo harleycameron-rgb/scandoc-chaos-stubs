@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "scandoc-chaos-stub-v1",
+  "title": "ArtificialChaosStub",
+  "type": "object",
+  "required": [
+    "id",
+    "version",
+    "created_at",
+    "interference_seed",
+    "completeness",
+    "semantic_payload",
+    "sentinel"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^stub_phi[0-9]{2}$"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "created_at": {
+      "type": ["string", "null"],
+      "description": "ISO-8601 UTC or null if sealed only by sentinel"
+    },
+    "interference_seed": {
+      "type": "object",
+      "required": ["phi", "gate_burn", "detune_drift_vector", "invariant_residue"],
+      "properties": {
+        "phi": {
+          "type": "array",
+          "minItems": 7,
+          "maxItems": 7,
+          "items": { "type": "number" }
+        },
+        "gate_burn": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 64
+        },
+        "detune_drift_vector": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": { "type": "number" }
+        },
+        "invariant_residue": {
+          "type": "string"
+        }
+      }
+    },
+    "completeness": {
+      "const": "intentionally_incomplete"
+    },
+    "semantic_payload": {
+      "type": "null"
+    },
+    "sentinel": {
+      "type": "string",
+      "minLength": 128,
+      "maxLength": 128,
+      "pattern": "^[0-9a-f]{128}$"
+    }
+  },
+  "additionalProperties": false
+}
