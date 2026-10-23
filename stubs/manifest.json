@@ -1,0 +1,22 @@
+{
+  "module": "A",
+  "count": 12,
+  "ids": [
+    "stub_phi01",
+    "stub_phi02",
+    "stub_phi03",
+    "stub_phi04",
+    "stub_phi05",
+    "stub_phi06",
+    "stub_phi07",
+    "stub_phi08",
+    "stub_phi09",
+    "stub_phi10",
+    "stub_phi11",
+    "stub_phi12"
+  ],
+  "schema": "stubs/schema.json",
+  "completeness": "intentionally_incomplete",
+  "semantic_payload_policy": "always_null",
+  "sentinel": "7d4f68401239a321bcda0b3459976ff2d06f3bb33ac509601adc3768767d2d213b1c6e5b91500121840f134352c7c4aa45b6db28abfe2f41dba19a9b25ffbb21"
+}
