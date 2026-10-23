@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "scandoc-silhouette-v1",
+  "title": "Silhouette",
+  "type": "object",
+  "required": [
+    "id",
+    "kind",
+    "version",
+    "rule_version",
+    "outline",
+    "completeness",
+    "semantic_payload",
+    "sentinel"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "kind": { "const": "silhouette" },
+    "version": { "type": "integer", "minimum": 1 },
+    "rule_version": {
+      "type": "string",
+      "const": "scandoc-silhouette-invariants/v1"
+    },
+    "created_at": { "type": ["string", "null"] },
+    "outline": {
+      "type": "object",
+      "required": ["motif"],
+      "properties": {
+        "motif": { "type": "string", "minLength": 1 },
+        "scale": { "type": "number" },
+        "axes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "residue_mark": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "completeness": { "const": "intentionally_incomplete" },
+    "semantic_payload": { "type": "null" },
+    "carrier_ref": { "type": ["string", "null"] },
+    "sentinel": {
+      "type": "string",
+      "minLength": 128,
+      "maxLength": 128,
+      "pattern": "^[0-9a-f]{128}$"
+    }
+  },
+  "additionalProperties": false
+}
