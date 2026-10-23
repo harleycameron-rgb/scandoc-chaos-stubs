@@ -1,0 +1,14 @@
+{
+  "id": "sil_dual_state_1",
+  "kind": "silhouette",
+  "version": 1,
+  "rule_version": "scandoc-silhouette-invariants/v1",
+  "created_at": null,
+  "outline": {
+    "motif": "dual_state",
+    "scale": 1
+  },
+  "completeness": "intentionally_incomplete",
+  "semantic_payload": null,
+  "sentinel": "ec82688456a07d1c0ae4106be252e358e27623bd9cacb6ac17c6e37d87563c986ea3b886bcbd1df191e15a04fbda47bcc204fdee9eade6aad0d8b5635e2270d1"
+}

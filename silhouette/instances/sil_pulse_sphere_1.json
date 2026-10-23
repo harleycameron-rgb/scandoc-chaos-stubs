@@ -1,0 +1,14 @@
+{
+  "id": "sil_pulse_sphere_1",
+  "kind": "silhouette",
+  "version": 1,
+  "rule_version": "scandoc-silhouette-invariants/v1",
+  "created_at": null,
+  "outline": {
+    "motif": "pulse_sphere",
+    "scale": 1
+  },
+  "completeness": "intentionally_incomplete",
+  "semantic_payload": null,
+  "sentinel": "6acec700cbe1ad46e62696451614e760c3d060eb76e681adc67ecdf9270cb4b6d3404b54bc70d6cd98ebb50ebd01cea5e97092ade81dce69b0f426acd2869a0f"
+}
