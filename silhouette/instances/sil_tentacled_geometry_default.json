@@ -1,0 +1,40 @@
+{
+  "id": "sil_tentacled_geometry_default",
+  "kind": "silhouette",
+  "version": 1,
+  "rule_version": "scandoc-silhouette-invariants/v1",
+  "created_at": null,
+  "outline": {
+    "motif": "tentacled_sphere_geometry",
+    "scale": 1.0,
+    "axes": ["model:api", "arms:8", "seed:1.0", "delta:0.1137"],
+    "residue_mark": "2fe842b76bd992a69baa4c64"
+  },
+  "completeness": "intentionally_incomplete",
+  "semantic_payload": null,
+  "carrier_ref": "https://github.com/harleycameron-rgb/Tentacled-sphere",
+  "geometry": {
+    "model": "api",
+    "seed": 1.0,
+    "delta": 0.1137,
+    "arm_count": 8,
+    "formula": {
+      "theta_i": "seed + i * delta",
+      "z_i": "1 - 2 * (i + 0.5) / 8",
+      "r_i": "sqrt(1 - z_i^2)",
+      "vector_i": "[r*cos(theta), r*sin(theta), z]",
+      "curvature_i": "1 / r_i"
+    },
+    "arms": [
+      {"index_0based": 0, "index_1based": 1, "app": "tap", "value": 1.0, "vector": [0.261572729068, 0.40737538881, 0.875], "curvature": 2.065591117977, "norm": 1.0},
+      {"index_0based": 1, "index_1based": 2, "app": "surface", "value": 1.1137, "vector": [0.344524358283, 0.70048409443, 0.625], "curvature": 1.281025230441, "norm": 1.0},
+      {"index_0based": 2, "index_1based": 3, "app": "spiritlevel", "value": 1.2274, "vector": [0.312117263247, 0.872901949811, 0.375], "curvature": 1.078719779941, "norm": 1.0},
+      {"index_0based": 3, "index_1based": 4, "app": "gain", "value": 1.3411, "vector": [0.225896069167, 0.96609832105, 0.125], "curvature": 1.007905261358, "norm": 1.0},
+      {"index_0based": 4, "index_1based": 5, "app": "habitat", "value": 1.4548, "vector": [0.114828626812, 0.985489414689, -0.125], "curvature": 1.007905261358, "norm": 1.0},
+      {"index_0based": 5, "index_1based": 6, "app": "time", "value": 1.5685, "vector": [0.002128750042, 0.927022366733, -0.375], "curvature": 1.078719779941, "norm": 1.0},
+      {"index_0based": 6, "index_1based": 7, "app": "space", "value": 1.6822, "vector": [-0.086784693331, 0.775785677235, -0.625], "curvature": 1.281025230441, "norm": 1.0},
+      {"index_0based": 7, "index_1based": 8, "app": "lineage", "value": 1.7959, "vector": [-0.108059828017, 0.47190896746, -0.875], "curvature": 2.065591117977, "norm": 1.0}
+    ]
+  },
+  "sentinel": "45b5593b81d4eef677fb8b16acb8bddc683ebfccd0b9e886ca656dbd92afe6a51347bd74f8115fff24d9cbc591fb172ab6f0479ce529fb2e96a37fd88360acdf"
+}
