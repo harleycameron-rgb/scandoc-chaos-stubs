@@ -1,0 +1,17 @@
+{
+  "id": "sil_tentacle_8",
+  "kind": "silhouette",
+  "version": 1,
+  "rule_version": "scandoc-silhouette-invariants/v1",
+  "created_at": null,
+  "outline": {
+    "motif": "tentacle_arm",
+    "scale": 1.0,
+    "axes": ["arm_index:8", "geometry:tentacled_sphere"],
+    "residue_mark": "c4dc5da6008a9a62b538ca4c"
+  },
+  "completeness": "intentionally_incomplete",
+  "semantic_payload": null,
+  "carrier_ref": "https://github.com/harleycameron-rgb/Tentacled-sphere",
+  "sentinel": "260efd764b84fb574d1f73eb29780498e267620876045ddd1fb33dd83a7784ae777db8b188bc6b56548cc4e528c92c1c4414ad56f47e927a63c9f0466b8d412e"
+}
