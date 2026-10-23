@@ -1,0 +1,26 @@
+{
+  "id": "stub_phi07",
+  "version": 1,
+  "created_at": null,
+  "interference_seed": {
+    "phi": [
+      2,
+      2,
+      3,
+      4,
+      6,
+      9,
+      14
+    ],
+    "gate_burn": "7cc35944002e970a7f22bc6827ea4a14",
+    "detune_drift_vector": [
+      -0.05649955,
+      -0.06804339,
+      0.00032888
+    ],
+    "invariant_residue": "951ded038d6c607d641d38d0"
+  },
+  "completeness": "intentionally_incomplete",
+  "semantic_payload": null,
+  "sentinel": "7dfcf1540dffdaa77e0349a8c1767142e6572945a793054487ae06bb5232f12f02e23931cf713adbc189c93f904770b3df4cd087cfeaa3ca681a3b402e2afef1"
+}
