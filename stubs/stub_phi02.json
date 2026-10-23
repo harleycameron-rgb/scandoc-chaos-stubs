@@ -3,12 +3,12 @@
   "version": 1,
   "created_at": null,
   "interference_seed": {
-    "phi": [3, 4, 6, 9, 14, 2, 3],
-    "gate_burn": "b1ef7e0928d13f59a1dfc632294f4c28",
-    "detune_drift_vector": [-0.01997433, -0.01641822, 8.198e-05],
-    "invariant_residue": "a488a6d6233772795596ge64"
+    "phi": [4, 5, 7, 10, 15, 3, 3],
+    "gate_burn": "66b43cf146c3592d23c450744c71731f",
+    "detune_drift_vector": [-0.01306525, -0.01987156, 9.796e-05],
+    "invariant_residue": "28204a75387653e7836d1166"
   },
   "completeness": "intentionally_incomplete",
   "semantic_payload": null,
-  "sentinel": "73baf8dd39d8ab70"
+  "sentinel": "73baf8dd39d8ab708872b8433ba73875366a7946160e79a97f18a9379b43381bac917ca7652ab76c0c09c5a3c6540041e7f49829847b232bd2d138d0b8d90287"
 }
