@@ -3,10 +3,10 @@
   "version": 1,
   "created_at": null,
   "interference_seed": {
-    "phi": [10, 15, 3, 3, 4, 5, 7],
-    "gate_burn": "422cd54d4576a3b6b12e5d35c70ad3bd",
-    "detune_drift_vector": [-0.01811737, -0.04987043, 0.00025988],
-    "invariant_residue": "d0dbe13738d1fe00bd081235"
+    "phi": [5, 8, 13, 1, 1, 2, 3],
+    "gate_burn": "c9e1f2a3b4d5061728394a5b6c7d8e9f",
+    "detune_drift_vector": [-0.04500112, -0.04200321, 0.00020112],
+    "invariant_residue": "bd5557151ddf9260d785f717"
   },
   "completeness": "intentionally_incomplete",
   "semantic_payload": null,
