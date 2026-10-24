@@ -46,3 +46,11 @@ jobs:
           else
             echo "No detune records; skip"
           fi
+
+      - name: Verify Module B moiré fields (if present)
+        run: |
+          if [ -d moire-fields ] && ls moire-fields/moire_*.json >/dev/null 2>&1; then
+            python -B src/verify_moire.py moire-fields
+          else
+            echo "No moiré fields; skip"
+          fi
