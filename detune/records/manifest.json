@@ -1,0 +1,30 @@
+{
+  "module": "C",
+  "rule_version": "scandoc-detune-invariants/v1",
+  "transform_id": "linear_scale_v1",
+  "count": 12,
+  "ids": [
+    "detune_stub_phi01",
+    "detune_stub_phi02",
+    "detune_stub_phi03",
+    "detune_stub_phi04",
+    "detune_stub_phi05",
+    "detune_stub_phi06",
+    "detune_stub_phi07",
+    "detune_stub_phi08",
+    "detune_stub_phi09",
+    "detune_stub_phi10",
+    "detune_stub_phi11",
+    "detune_stub_phi12"
+  ],
+  "params_default": {
+    "scale": 1.0,
+    "bias": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "semantic_payload_policy": "always_null",
+  "sentinel": "9fb264078f9253ea812794397d8a5670da6b81fd5b5eaaded1254d87c9e19db33ef3cc1a89d4a63994081afc4881f5034bf87b6c44c4758bdcf3f6e16fa7f217"
+}
