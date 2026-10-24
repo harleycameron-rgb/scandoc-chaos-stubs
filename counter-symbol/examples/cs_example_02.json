@@ -1,0 +1,33 @@
+{
+  "commitment": "4a73e81dcfd788e4935fd304372087936d1f0682776f36c93ed8d2161952b008988e5845f566ece9db05b147ad7785ee63cea25ed34a82c1f07845da4b7779b5",
+  "commitment_fields": [
+    "schema",
+    "record_id",
+    "logical_tick",
+    "vector",
+    "measurements"
+  ],
+  "experimental": true,
+  "gates": {
+    "daemon_gate_allows_activation": false,
+    "live_gate": "CLOSED",
+    "sphere_writes": false
+  },
+  "logical_tick": 1,
+  "measurements": [
+    {
+      "missing_reason": "sensor offline",
+      "name": "m1"
+    }
+  ],
+  "observations": [],
+  "record_id": "cs_example_02",
+  "residuals": {},
+  "schema": "scandoc-counter-symbol/0.1",
+  "synthetic": true,
+  "vector": [
+    0.3,
+    0.2,
+    0.1
+  ]
+}

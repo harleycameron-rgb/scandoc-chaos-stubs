@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "scandoc-counter-symbol/0.1",
+  "type": "object",
+  "required": ["schema", "record_id", "logical_tick", "vector", "measurements", "residuals", "observations", "commitment_fields", "gates", "commitment"],
+  "properties": {
+    "schema": {"const": "scandoc-counter-symbol/0.1"},
+    "record_id": {"type": "string"},
+    "logical_tick": {"type": "integer", "minimum": 0},
+    "vector": {"type": "array", "minItems": 1, "items": {"type": "number"}},
+    "measurements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "value": {"type": "number"},
+          "expected": {"type": "number"},
+          "missing_reason": {"type": "string", "minLength": 1}
+        },
+        "oneOf": [{"required": ["value"]}, {"required": ["missing_reason"]}]
+      }
+    },
+    "residuals": {"type": "object", "additionalProperties": {"type": "number"}},
+    "observations": {"type": "array", "items": {"type": "object", "required": ["logical_tick"]}},
+    "commitment_fields": {"const": ["schema", "record_id", "logical_tick", "vector", "measurements"]},
+    "gates": {
+      "type": "object",
+      "required": ["daemon_gate_allows_activation", "live_gate", "sphere_writes"],
+      "properties": {
+        "daemon_gate_allows_activation": {"const": false},
+        "live_gate": {"const": "CLOSED"},
+        "sphere_writes": {"const": false}
+      }
+    },
+    "experimental": {"type": "boolean"},
+    "synthetic": {"type": "boolean"},
+    "commitment": {"type": "string", "pattern": "^[0-9a-f]{128}$"}
+  }
+}

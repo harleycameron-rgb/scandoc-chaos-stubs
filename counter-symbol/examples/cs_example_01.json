@@ -1,0 +1,36 @@
+{
+  "commitment": "095455c38c0e744da245db50fc6593b33ea87caa04a7a33a61ae380d9e58399e81e19d4854ccd3ea354e288741c9d029e7c2a6e069476fac6914e2d37bb10014",
+  "commitment_fields": [
+    "schema",
+    "record_id",
+    "logical_tick",
+    "vector",
+    "measurements"
+  ],
+  "experimental": true,
+  "gates": {
+    "daemon_gate_allows_activation": false,
+    "live_gate": "CLOSED",
+    "sphere_writes": false
+  },
+  "logical_tick": 0,
+  "measurements": [
+    {
+      "expected": 0.9,
+      "name": "m1",
+      "value": 1.0
+    }
+  ],
+  "observations": [],
+  "record_id": "cs_example_01",
+  "residuals": {
+    "m1": 0.09999999999999998
+  },
+  "schema": "scandoc-counter-symbol/0.1",
+  "synthetic": true,
+  "vector": [
+    0.1,
+    0.2,
+    0.3
+  ]
+}
