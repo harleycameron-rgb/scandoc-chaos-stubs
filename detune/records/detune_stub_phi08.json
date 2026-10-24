@@ -1,0 +1,29 @@
+{
+  "id": "detune_stub_phi08",
+  "kind": "detune_record",
+  "version": 1,
+  "rule_version": "scandoc-detune-invariants/v1",
+  "transform_id": "linear_scale_v1",
+  "input_stub_id": "stub_phi08",
+  "params": {
+    "scale": 1.0,
+    "bias": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "input_drift": [
+    -0.00237448,
+    -0.07736426,
+    0.00043978
+  ],
+  "output_drift": [
+    -0.00237448,
+    -0.07736426,
+    0.00043978
+  ],
+  "completeness": "intentionally_incomplete",
+  "semantic_payload": null,
+  "sentinel": "052b5587641296626ddf1d405b198b24eee8523c84563f113430d06fdd58494ad00a5780b04b595e3818e257f89302073d4408b65a4bdd532f07f672b96edcdc"
+}
