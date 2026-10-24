@@ -96,6 +96,10 @@ def validate_record(record: dict) -> bool:
                 or (measurement.get("slot") is not None
                     and not isinstance(measurement["slot"], str))):
             raise ValueError("missing measurements require name and missing_reason")
+    if vector is None and not any(
+        measurement["name"] == "residual_vector" for measurement in missing
+    ):
+        raise ValueError("null residual_vector requires an explicit missing reason")
     commitment = record["commitment"]
     if (not isinstance(commitment, str)
             or re.fullmatch(r"[0-9a-f]{128}", commitment) is None
@@ -123,7 +127,10 @@ def build_counter_symbol(
         "evidence_status": evidence_status,
         "topology_commitment": None,
         "related_stub_ids": [],
-        "missing_measurements": [],
+        "missing_measurements": (
+            [{"name": "residual_vector", "missing_reason": "residual not supplied"}]
+            if residual_vector is None else []
+        ),
         "reserved_future_fields": [],
         "live_gate": "CLOSED",
         "sphere_writes": False,
@@ -151,6 +158,14 @@ def append_observation(
     )
     record["commitment"] = compute_commitment(record)
     validate_record(record)
+    if logical_tick < parent["logical_tick"]:
+        raise ValueError("an observation cannot precede its parent logical_tick")
+    if not {"stub_id", "logical_tick", "parent_commitment"}.issubset(
+        record.get("commitment_fields", COMMITMENT_FIELDS)
+    ):
+        raise ValueError("observations must commit their identity, tick, and parent link")
+    if record["commitment"] == parent["commitment"]:
+        raise ValueError("an observation must have a new commitment")
     return record
 
 

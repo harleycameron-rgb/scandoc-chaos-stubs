@@ -33,8 +33,12 @@ keys, compact separators, and UTF-8 without ASCII escaping.
 `append_observation(parent, stub_id, logical_tick, **observation)` copies the
 parent, applies explicit observation fields, and seals a new parent-linked
 record with a different ID. It does not mutate inputs or write files.
+Observation ticks cannot precede their parent's tick, and observation
+commitments must include the new ID, logical tick, and parent link.
 Missing residuals remain `null`; missing-measurement entries require both a
-nonempty `name` and `missing_reason`.
+nonempty `name` and `missing_reason`. Null residuals require an entry named
+`residual_vector`; the builder explicitly labels an omitted residual as
+`residual not supplied`.
 
 `correlate_pair(left, right)` reports signed tick lag (`right - left`),
 Euclidean residual distance, and topology commitment equality. Missing, empty,

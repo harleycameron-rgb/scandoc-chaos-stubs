@@ -60,16 +60,28 @@ class CounterSymbolTests(unittest.TestCase):
         self.assertEqual(parent, original)
         with self.assertRaises(ValueError):
             append_observation(parent, "parent", 1)
+        partial = build_counter_symbol(
+            "partial", residual_vector=[1], commitment_fields=["residual_vector"],
+        )
+        with self.assertRaises(ValueError):
+            append_observation(partial, "child", 1)
 
     def test_missing_measurements_are_explicit(self):
         record = build_counter_symbol(
             "missing", residual_type="missing_measurement", evidence_status="INCOMPLETE",
-            missing_measurements=[{"name": "sensor", "missing_reason": "offline"}],
+            missing_measurements=[{"name": "residual_vector", "missing_reason": "offline"}],
         )
         self.assertIsNone(record["residual_vector"])
         self.assertTrue(validate_record(record))
+        default = build_counter_symbol("default")
+        self.assertEqual(default["missing_measurements"][0]["name"], "residual_vector")
+        unexplained = dict(default, missing_measurements=[])
+        unexplained["commitment"] = compute_commitment(unexplained)
+        with self.assertRaises(ValueError):
+            validate_record(unexplained)
         for missing in ([{"name": "sensor"}], [{"missing_reason": "offline"}],
-                        [{"name": "", "missing_reason": "offline"}], None):
+                        [{"name": "", "missing_reason": "offline"}], None, [],
+                        [{"name": "unrelated", "missing_reason": "offline"}]):
             with self.subTest(missing=missing), self.assertRaises(ValueError):
                 build_counter_symbol("bad", missing_measurements=missing)
 
@@ -87,6 +99,9 @@ class CounterSymbolTests(unittest.TestCase):
             with self.subTest(tick=tick), self.assertRaises(ValueError):
                 build_counter_symbol("bad", logical_tick=tick)
         self.assertTrue(validate_record(build_counter_symbol("zero", logical_tick=0)))
+        parent = build_counter_symbol("parent", logical_tick=10)
+        with self.assertRaises(ValueError):
+            append_observation(parent, "child", 9)
 
     def test_gates_permanently_closed(self):
         record = build_counter_symbol("closed")
