@@ -1,0 +1,28 @@
+{
+  "schema_version": "scandoc-counter-symbol/0.1",
+  "stub_id": "cs-synthetic-001",
+  "source_modality": "synthetic",
+  "parent_commitment": null,
+  "sentinel_reference": null,
+  "logical_tick": 0,
+  "timestamp_utc": null,
+  "residual_type": "unresolved",
+  "residual_vector": [0.1, -0.2, 0.05],
+  "evidence_status": "UNVERIFIED",
+  "topology_commitment": null,
+  "related_stub_ids": ["stub_phi01"],
+  "missing_measurements": [
+    {"name": "post_separation_sample", "missing_reason": "not_acquired"}
+  ],
+  "reserved_future_fields": ["quantum_slot_v1"],
+  "live_gate": "CLOSED",
+  "sphere_writes": false,
+  "commitment_fields": [
+    "schema_version", "stub_id", "source_modality", "parent_commitment",
+    "sentinel_reference", "logical_tick", "timestamp_utc", "residual_type",
+    "residual_vector", "evidence_status", "topology_commitment",
+    "related_stub_ids", "missing_measurements", "reserved_future_fields",
+    "live_gate", "sphere_writes"
+  ],
+  "commitment": "49a6560ee889bea1062444806e1b6a5c8a37f9acf9458342be828e4533e3631246522038b692823fcc09b80e15052555dfa6305f72de4a8d1819e14b96f530ef"
+}
