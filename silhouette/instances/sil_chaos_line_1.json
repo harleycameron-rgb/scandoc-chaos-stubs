@@ -1,0 +1,14 @@
+{
+  "id": "sil_chaos_line_1",
+  "kind": "silhouette",
+  "version": 1,
+  "rule_version": "scandoc-silhouette-invariants/v1",
+  "created_at": null,
+  "outline": {
+    "motif": "chaos_line",
+    "scale": 1
+  },
+  "completeness": "intentionally_incomplete",
+  "semantic_payload": null,
+  "sentinel": "ea83bd94b0ad6da98e3cba5b0430120abc0499fc7c63483ba90b8839a2a68ca455c325caf69c70a14492cb1dd1975132bbab9631b7792e6ed74cf3515943e413"
+}

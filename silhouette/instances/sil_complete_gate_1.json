@@ -1,0 +1,14 @@
+{
+  "id": "sil_complete_gate_1",
+  "kind": "silhouette",
+  "version": 1,
+  "rule_version": "scandoc-silhouette-invariants/v1",
+  "created_at": null,
+  "outline": {
+    "motif": "complete_gate",
+    "scale": 1
+  },
+  "completeness": "intentionally_incomplete",
+  "semantic_payload": null,
+  "sentinel": "3bddbb1f4e8c52250dc0ecfe39dcaf3673126bcc7744ac0ac1c62e4e174b66fa8bd20838f198d5817f356f539df841020f31fecebade1d9714651bf1d0d821ea"
+}

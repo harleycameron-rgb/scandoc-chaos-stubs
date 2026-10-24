@@ -49,6 +49,26 @@ python -B src/stub_factory.py --verify stubs
 
 Requires only the Python standard library.
 
+### Silhouette layer
+
+The [silhouette specification](docs/SILHOUETTE.md) and
+[schema](silhouette/schema.json) define sealed outlines without semantic payload.
+The default factory emits all five Daemongate labels as motifs only
+(`chaos_line`, `dual_state`, `pulse_sphere`, `convergent_projection`,
+`complete_gate`), each at scales `1`, `0.1`, and `0.01`.
+
+```bash
+python -B src/silhouette_factory.py --out silhouette/instances
+python -B src/verify_silhouette.py silhouette/instances
+python -B src/verify_silhouette.py silhouette/instances/sil_chaos_line_1.json --json
+```
+
+Generation is deterministic. Both instances and the manifest use the existing
+SHA-512 sentinel discipline. Verification checks integrity and the pinned
+`scandoc-silhouette-invariants/v1` constraints offline, including manifest
+integrity and inventory when verifying a directory. It exits zero only when
+all checks pass; optional `carrier_ref` pointers are never fetched.
+
 ## Relation to constellation
 
 - **Residue** → `invariant_residue`

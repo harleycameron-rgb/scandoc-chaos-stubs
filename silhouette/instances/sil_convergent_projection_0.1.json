@@ -1,0 +1,14 @@
+{
+  "id": "sil_convergent_projection_0.1",
+  "kind": "silhouette",
+  "version": 1,
+  "rule_version": "scandoc-silhouette-invariants/v1",
+  "created_at": null,
+  "outline": {
+    "motif": "convergent_projection",
+    "scale": 0.1
+  },
+  "completeness": "intentionally_incomplete",
+  "semantic_payload": null,
+  "sentinel": "c8be403c980e6167b84c865d0f71a2f77c8319181d4311b288a80c558ef46f851c0bf61bd2b1af418d3d39850ef83c6f2be960fa4d9ef35d262ad6bce8a5497e"
+}

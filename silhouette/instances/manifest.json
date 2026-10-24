@@ -1,0 +1,25 @@
+{
+  "rule_version": "scandoc-silhouette-invariants/v1",
+  "count": 15,
+  "ids": [
+    "sil_chaos_line_1",
+    "sil_chaos_line_0.1",
+    "sil_chaos_line_0.01",
+    "sil_dual_state_1",
+    "sil_dual_state_0.1",
+    "sil_dual_state_0.01",
+    "sil_pulse_sphere_1",
+    "sil_pulse_sphere_0.1",
+    "sil_pulse_sphere_0.01",
+    "sil_convergent_projection_1",
+    "sil_convergent_projection_0.1",
+    "sil_convergent_projection_0.01",
+    "sil_complete_gate_1",
+    "sil_complete_gate_0.1",
+    "sil_complete_gate_0.01"
+  ],
+  "schema": "silhouette/schema.json",
+  "completeness": "intentionally_incomplete",
+  "semantic_payload_policy": "always_null",
+  "sentinel": "cbe46a028ab1426f4df3ed440947857925ff9b9318ba716ece5cc5558f6613b7a359483302cc55c5a87caacbe305d4584dd611b64f1afbdf8ae6e5012c972016"
+}
