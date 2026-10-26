@@ -1,0 +1,15 @@
+{
+  "id": "moire_full_set",
+  "kind": "moire_field",
+  "version": 1,
+  "rule_version": "scandoc-moire-invariants/v1",
+  "plate": "full_set",
+  "input_stub_ids": ["stub_phi01", "stub_phi02", "stub_phi03", "stub_phi04", "stub_phi05", "stub_phi06", "stub_phi07", "stub_phi08", "stub_phi09", "stub_phi10", "stub_phi11", "stub_phi12"],
+  "mean_phi": [5.333333333333333, 6.333333333333333, 6.25, 6.083333333333333, 5.833333333333333, 5.416666666666667, 4.75],
+  "mean_drift": [-0.036938307499999996, -0.05926702416666666, 0.0003117075],
+  "pair_residue_energy": 160.0,
+  "stub_count": 12,
+  "completeness": "intentionally_incomplete",
+  "semantic_payload": null,
+  "sentinel": "b812d23bc65ceca0710ea5791a159905f5e94e30ecba414b2fbe92189916e9ef20a63c39554a21d28a5f3bd4708b3c15599e85047facdc1df59f0155c9403cf7"
+}

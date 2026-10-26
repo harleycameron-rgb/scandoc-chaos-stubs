@@ -1,0 +1,16 @@
+{
+  "module": "B",
+  "rule_version": "scandoc-moire-invariants/v1",
+  "count": 7,
+  "ids": [
+    "moire_stub_phi01_stub_phi02",
+    "moire_stub_phi03_stub_phi04",
+    "moire_stub_phi05_stub_phi06",
+    "moire_stub_phi07_stub_phi08",
+    "moire_stub_phi09_stub_phi10",
+    "moire_stub_phi11_stub_phi12",
+    "moire_full_set"
+  ],
+  "semantic_payload_policy": "always_null",
+  "sentinel": "fffbb27d66427ee30ba0a9e680d33c5d326f776e69f51d1e89f1066720337bc63d8746de63c7be717ec5db32386790746f3d30f72365660722986a14e74b39b5"
+}
