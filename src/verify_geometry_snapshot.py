@@ -1,64 +1,59 @@
 #!/usr/bin/env python3
-"""Offline checks for tentacled geometry snapshot silhouettes."""
-
-from __future__ import annotations
-
+"""Validate the sealed archive's eight-vector helical preview geometry."""
 import argparse
 import json
 import math
-import sys
 from pathlib import Path
 
+APPS = ('tap', 'surface', 'spiritlevel', 'gain', 'habitat', 'time', 'space', 'lineage')
 
-def check(data: dict) -> list:
-    out = []
-    g = data.get("geometry")
+def finite(x):
+    return type(x) in (int, float) and math.isfinite(x)
+
+def check(data):
+    g = data.get('geometry')
     if not isinstance(g, dict):
-        return [("geometry_object", False, "missing geometry")]
-
-    arms = g.get("arms")
-    n = g.get("arm_count")
-    out.append((
-        "arm_count_8",
-        n == 8 and isinstance(arms, list) and len(arms) == 8,
-        f"count={n} len={len(arms) if isinstance(arms, list) else None}",
-    ))
-
-    if not isinstance(arms, list):
+        return [('geometry_object', False, 'missing geometry')]
+    arms = g.get('arms')
+    shape = (type(g.get('arm_count')) is int and g['arm_count'] == 8
+             and isinstance(arms, list) and len(arms) == 8
+             and finite(g.get('seed')) and finite(g.get('delta')))
+    out = [('geometry_shape', shape, 'eight arms and finite seed/delta required')]
+    if not shape:
         return out
-
-    for a in arms:
-        v = a.get("vector")
-        if not (isinstance(v, list) and len(v) == 3):
-            out.append((f"vector_{a.get('app')}", False, "bad vector"))
-            continue
-        norm = math.sqrt(sum(float(x) * float(x) for x in v))
-        ok = abs(norm - 1.0) <= 1e-6
-        out.append((f"unit_{a.get('app')}", ok, f"norm={norm}"))
-
-    if len(arms) >= 8:
-        lin = arms[7]
-        out.append((
-            "arm8_lineage",
-            lin.get("app") == "lineage" and lin.get("index_1based") == 8,
-            f"app={lin.get('app')} index_1based={lin.get('index_1based')}",
-        ))
+    for i, arm in enumerate(arms):
+        valid = isinstance(arm, dict)
+        if valid:
+            v = arm.get('vector')
+            valid = (arm.get('app') == APPS[i] and type(arm.get('index_0based')) is int
+                     and arm['index_0based'] == i and type(arm.get('index_1based')) is int
+                     and arm['index_1based'] == i + 1 and isinstance(v, list)
+                     and len(v) == 3 and all(finite(x) for x in v))
+        if valid:
+            theta = g['seed'] + i * g['delta']
+            valid = math.isfinite(theta)
+            if valid:
+                z = 1 - 2 * (i + 0.5) / 8
+                r = math.sqrt(1 - z*z)
+                expected = (r*math.cos(theta), r*math.sin(theta), z)
+                valid = (all(abs(a-b) <= 1e-6 for a,b in zip(v,expected))
+                         and abs(math.hypot(*v)-1) <= 1e-6
+                         and finite(arm.get('value')) and abs(arm['value']-theta) <= 1e-6
+                         and finite(arm.get('curvature')) and abs(arm['curvature']-1/r) <= 1e-6
+                         and finite(arm.get('norm')) and abs(arm['norm']-1) <= 1e-6)
+        out.append((f'arm_{i+1}', valid, 'ordered app, formula, unit vector and curvature'))
     return out
 
+def main():
+    ap = argparse.ArgumentParser(); ap.add_argument('path'); args = ap.parse_args()
+    try:
+        from verify_silhouette import verify_one
+        report = verify_one(Path(args.path))
+        results = check(json.loads(Path(args.path).read_text()))
+        ok = report['upheld'] and all(item[1] for item in results)
+    except (OSError, ValueError, TypeError, OverflowError, AttributeError):
+        ok = False
+    print('all_ok:', ok)
+    raise SystemExit(0 if ok else 1)
 
-def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("path")
-    args = ap.parse_args()
-    data = json.loads(Path(args.path).read_text(encoding="utf-8"))
-    results = check(data)
-    all_ok = True
-    for name, ok, detail in results:
-        print(f"  [{'OK' if ok else 'FAIL'}] {name}: {detail}")
-        all_ok = all_ok and ok
-    print("all_ok:" if all_ok else "FAILED", all_ok)
-    raise SystemExit(0 if all_ok else 1)
-
-
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__': main()

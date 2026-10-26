@@ -28,3 +28,5 @@ jobs:
       - name: counter-symbol
         run: |
           if [ -f tests/test_counter_symbol.py ] && [ -f src/counter_symbol.py ]; then python -m unittest tests.test_counter_symbol -v; fi
+      - name: archive regression tests
+        run: python -B -m unittest discover -s tests -v

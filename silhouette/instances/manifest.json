@@ -1,25 +1,27 @@
 {
   "rule_version": "scandoc-silhouette-invariants/v1",
-  "count": 15,
+  "count": 17,
   "ids": [
-    "sil_chaos_line_1",
-    "sil_chaos_line_0.1",
     "sil_chaos_line_0.01",
-    "sil_dual_state_1",
-    "sil_dual_state_0.1",
-    "sil_dual_state_0.01",
-    "sil_pulse_sphere_1",
-    "sil_pulse_sphere_0.1",
-    "sil_pulse_sphere_0.01",
-    "sil_convergent_projection_1",
-    "sil_convergent_projection_0.1",
-    "sil_convergent_projection_0.01",
-    "sil_complete_gate_1",
+    "sil_chaos_line_0.1",
+    "sil_chaos_line_1",
+    "sil_complete_gate_0.01",
     "sil_complete_gate_0.1",
-    "sil_complete_gate_0.01"
+    "sil_complete_gate_1",
+    "sil_convergent_projection_0.01",
+    "sil_convergent_projection_0.1",
+    "sil_convergent_projection_1",
+    "sil_dual_state_0.01",
+    "sil_dual_state_0.1",
+    "sil_dual_state_1",
+    "sil_pulse_sphere_0.01",
+    "sil_pulse_sphere_0.1",
+    "sil_pulse_sphere_1",
+    "sil_tentacle_8",
+    "sil_tentacled_geometry_default"
   ],
   "schema": "silhouette/schema.json",
   "completeness": "intentionally_incomplete",
   "semantic_payload_policy": "always_null",
-  "sentinel": "cbe46a028ab1426f4df3ed440947857925ff9b9318ba716ece5cc5558f6613b7a359483302cc55c5a87caacbe305d4584dd611b64f1afbdf8ae6e5012c972016"
+  "sentinel": "288e1c0a230e51c7aebbbff2b8783d6016a0583506314ca20cd0cda53d6c0cbef3e5ee38440ebe1771bc7f8ecf076aa2c0a86bad3beaef07e7690936ef865618"
 }

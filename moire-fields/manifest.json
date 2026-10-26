@@ -3,14 +3,19 @@
   "rule_version": "scandoc-moire-invariants/v1",
   "count": 7,
   "ids": [
-    "moire_stub_phi01_stub_phi02",
-    "moire_stub_phi03_stub_phi04",
-    "moire_stub_phi05_stub_phi06",
-    "moire_stub_phi07_stub_phi08",
-    "moire_stub_phi09_stub_phi10",
-    "moire_stub_phi11_stub_phi12",
+    "moire_phi01_02",
+    "moire_phi03_04",
+    "moire_phi05_06",
+    "moire_phi07_08",
+    "moire_phi09_10",
+    "moire_phi11_12",
     "moire_full_set"
   ],
+  "params_default": {
+    "drift_delta_order": "first_minus_second",
+    "gate_xor_hex_length": 32,
+    "pair_residue_energy": "sum_squared_consecutive_pair_residues"
+  },
   "semantic_payload_policy": "always_null",
-  "sentinel": "fffbb27d66427ee30ba0a9e680d33c5d326f776e69f51d1e89f1066720337bc63d8746de63c7be717ec5db32386790746f3d30f72365660722986a14e74b39b5"
+  "sentinel": "efd28c827d0c6732a05e877687e0999eafdefb8a945bb8f9d84238fbf70d26d70a88b6deb377cf81cbff113d9d3873930c5c01b751f5c2ea4a013ce94ee8e5dc"
 }
