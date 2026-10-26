@@ -1,69 +1,262 @@
 #!/usr/bin/env python3
-"""Counter-Symbol Chaos Stub v0.1 — residual research records. Gate CLOSED."""
+"""Offline, append-only counter-symbol research records. No activation authority."""
+
 from __future__ import annotations
-import argparse, hashlib, json, math
+
+import argparse
+import copy
+import hashlib
+import json
+import math
+import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Sequence
+
 SCHEMA_VERSION = "scandoc-counter-symbol/0.1"
-COMMITMENT_FIELDS = ("schema_version","stub_id","source_modality","parent_commitment","sentinel_reference","logical_tick","timestamp_utc","residual_type","residual_vector","evidence_status","topology_commitment","related_stub_ids","missing_measurements","reserved_future_fields","live_gate","sphere_writes")
-class CounterSymbolError(ValueError): pass
-def _canonical(record):
-    body = {k: record.get(k) for k in COMMITMENT_FIELDS}
-    return json.dumps(body, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
-def compute_commitment(record):
-    return hashlib.sha512(_canonical(record).encode()).hexdigest()
-def _vec(vec, name):
-    if vec is None: return None
-    out=[]
-    for i,x in enumerate(vec):
-        if not isinstance(x,(int,float)) or isinstance(x,bool): raise CounterSymbolError(f"{name}[{i}] bad")
-        fx=float(x)
-        if not math.isfinite(fx): raise CounterSymbolError(f"{name}[{i}] nonfinite")
-        out.append(fx)
-    return out
-def validate_record(record, require_commitment_match=True):
-    if record.get("schema_version")!=SCHEMA_VERSION: raise CounterSymbolError("schema")
-    if not record.get("stub_id"): raise CounterSymbolError("stub_id")
-    if record.get("source_modality") not in {"synthetic","observed_classical","hypothetical"}: raise CounterSymbolError("modality")
-    tick=record.get("logical_tick")
-    if not isinstance(tick,int) or isinstance(tick,bool) or tick<0: raise CounterSymbolError("tick")
-    if record.get("residual_type") not in {"unresolved","rejected_transition","post_separation_drift","interpretation_claim","missing_measurement"}: raise CounterSymbolError("residual_type")
-    if record.get("evidence_status") not in {"UNVERIFIED","REJECTED","INCOMPLETE"}: raise CounterSymbolError("evidence")
-    if record.get("live_gate")!="CLOSED": raise CounterSymbolError("gate")
-    if record.get("sphere_writes") is not False: raise CounterSymbolError("writes")
-    _vec(record.get("residual_vector"),"residual_vector")
-    for i,item in enumerate(record.get("missing_measurements") or []):
-        if not item.get("name") or not item.get("missing_reason"): raise CounterSymbolError(f"missing[{i}]")
-    if require_commitment_match:
-        if record.get("commitment")!=compute_commitment(record): raise CounterSymbolError("commitment")
-def build_counter_symbol(*, stub_id, source_modality="synthetic", residual_type="unresolved", residual_vector=None, logical_tick=0, timestamp_utc=None, parent_commitment=None, sentinel_reference=None, topology_commitment=None, related_stub_ids=None, missing_measurements=None, reserved_future_fields=None, evidence_status="UNVERIFIED"):
-    rec={"schema_version":SCHEMA_VERSION,"stub_id":stub_id,"source_modality":source_modality,"parent_commitment":parent_commitment,"sentinel_reference":sentinel_reference,"logical_tick":logical_tick,"timestamp_utc":timestamp_utc,"residual_type":residual_type,"residual_vector":_vec(residual_vector,"residual_vector"),"evidence_status":evidence_status,"topology_commitment":topology_commitment,"related_stub_ids":list(related_stub_ids or []),"missing_measurements":list(missing_measurements or []),"reserved_future_fields":list(reserved_future_fields or []),"live_gate":"CLOSED","sphere_writes":False,"commitment_fields":list(COMMITMENT_FIELDS),"commitment":""}
-    rec["commitment"]=compute_commitment(rec); validate_record(rec); return rec
-def daemon_gate_allows_activation(record):
-    validate_record(record); return False
-def append_observation(parent, *, new_stub_id, residual_type, residual_vector=None, missing_measurements=None, logical_tick=None):
+COMMITMENT_FIELDS = (
+    "schema_version", "stub_id", "source_modality", "parent_commitment",
+    "sentinel_reference", "logical_tick", "timestamp_utc", "residual_type",
+    "residual_vector", "evidence_status", "topology_commitment",
+    "related_stub_ids", "missing_measurements", "reserved_future_fields",
+    "live_gate", "sphere_writes",
+)
+REQUIRED_FIELDS = {
+    "schema_version", "stub_id", "source_modality", "logical_tick",
+    "residual_type", "evidence_status", "live_gate", "sphere_writes",
+    "commitment",
+}
+
+
+def compute_commitment(record: dict) -> str:
+    """Hash only the named fields, excluding the digest and field list itself."""
+    fields = record.get("commitment_fields", list(COMMITMENT_FIELDS))
+    if (not isinstance(fields, list) or not fields
+            or any(not isinstance(key, str) or key not in COMMITMENT_FIELDS
+                   for key in fields)
+            or len(set(fields)) != len(fields)):
+        raise ValueError("commitment_fields must be unique record field names")
+    payload = {key: record[key] for key in fields if key in record}
+    canonical = json.dumps(
+        payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False,
+        allow_nan=False,
+    )
+    return hashlib.sha512(canonical.encode("utf-8")).hexdigest()
+
+
+def validate_record(record: dict) -> bool:
+    """Validate schema constraints and integrity; raise ValueError on failure."""
+    if not isinstance(record, dict):
+        raise ValueError("record must be an object")
+    allowed = set(COMMITMENT_FIELDS) | {"commitment", "commitment_fields"}
+    if not REQUIRED_FIELDS.issubset(record) or set(record) - allowed:
+        raise ValueError("missing required fields or unknown record fields")
+    if record["schema_version"] != SCHEMA_VERSION:
+        raise ValueError("unsupported schema_version")
+    if not isinstance(record["stub_id"], str) or not record["stub_id"]:
+        raise ValueError("stub_id must be a nonempty string")
+    for key, choices in (
+        ("source_modality", ("synthetic", "observed_classical", "hypothetical")),
+        ("residual_type", ("unresolved", "rejected_transition",
+                           "post_separation_drift", "interpretation_claim",
+                           "missing_measurement")),
+        ("evidence_status", ("UNVERIFIED", "REJECTED", "INCOMPLETE")),
+    ):
+        if record[key] not in choices:
+            raise ValueError(f"invalid {key}")
+    tick = record["logical_tick"]
+    if type(tick) is not int or tick < 0:
+        raise ValueError("logical_tick must be a nonnegative integer")
+    if record["live_gate"] != "CLOSED" or record["sphere_writes"] is not False:
+        raise ValueError("live_gate must be CLOSED and sphere_writes false")
+    for key in ("parent_commitment", "sentinel_reference", "timestamp_utc",
+                "topology_commitment"):
+        if record.get(key) is not None and not isinstance(record[key], str):
+            raise ValueError(f"{key} must be a string or null")
+    vector = record.get("residual_vector")
+    if vector is not None:
+        if not isinstance(vector, list) or any(
+            type(value) not in (int, float)
+            or (isinstance(value, float) and not math.isfinite(value))
+            for value in vector
+        ):
+            raise ValueError("residual_vector must contain finite numbers or be null")
+    for key in ("related_stub_ids", "reserved_future_fields"):
+        if key in record and (
+            not isinstance(record[key], list)
+            or any(not isinstance(value, str) for value in record[key])
+        ):
+            raise ValueError(f"{key} must be an array of strings")
+    missing = record.get("missing_measurements", [])
+    if not isinstance(missing, list):
+        raise ValueError("missing_measurements must be an array")
+    for measurement in missing:
+        if (not isinstance(measurement, dict)
+                or any(not isinstance(measurement.get(key), str)
+                       or not measurement[key].strip()
+                       for key in ("name", "missing_reason"))
+                or (measurement.get("slot") is not None
+                    and not isinstance(measurement["slot"], str))):
+            raise ValueError("missing measurements require name and missing_reason")
+    if vector is None and not any(
+        measurement["name"] == "residual_vector" for measurement in missing
+    ):
+        raise ValueError("null residual_vector requires an explicit missing reason")
+    commitment = record["commitment"]
+    if (not isinstance(commitment, str)
+            or re.fullmatch(r"[0-9a-f]{128}", commitment) is None
+            or commitment != compute_commitment(record)):
+        raise ValueError("invalid or mismatched commitment")
+    return True
+
+
+def build_counter_symbol(
+    stub_id: str, logical_tick: int = 0, *, source_modality: str = "synthetic",
+    residual_type: str = "unresolved", residual_vector: list | None = None,
+    evidence_status: str = "UNVERIFIED", **fields,
+) -> dict:
+    """Build a detached record; absent residuals remain null, never zero-filled."""
+    record = {
+        "schema_version": SCHEMA_VERSION,
+        "stub_id": stub_id,
+        "source_modality": source_modality,
+        "parent_commitment": None,
+        "sentinel_reference": None,
+        "logical_tick": logical_tick,
+        "timestamp_utc": None,
+        "residual_type": residual_type,
+        "residual_vector": residual_vector,
+        "evidence_status": evidence_status,
+        "topology_commitment": None,
+        "related_stub_ids": [],
+        "missing_measurements": (
+            [{"name": "residual_vector", "missing_reason": "residual not supplied"}]
+            if residual_vector is None else []
+        ),
+        "reserved_future_fields": [],
+        "live_gate": "CLOSED",
+        "sphere_writes": False,
+        "commitment_fields": list(COMMITMENT_FIELDS),
+    }
+    record.update(fields)
+    record = copy.deepcopy(record)
+    record["commitment"] = compute_commitment(record)
+    validate_record(record)
+    return record
+
+
+def append_observation(
+    parent: dict, stub_id: str, logical_tick: int, **observation,
+) -> dict:
+    """Return a new linked record without modifying the parent or any files."""
     validate_record(parent)
-    tick=logical_tick if logical_tick is not None else int(parent["logical_tick"])+1
-    return build_counter_symbol(stub_id=new_stub_id, source_modality=parent["source_modality"], residual_type=residual_type, residual_vector=residual_vector, logical_tick=tick, parent_commitment=parent["commitment"], sentinel_reference=parent.get("sentinel_reference"), topology_commitment=parent.get("topology_commitment"), related_stub_ids=list(parent.get("related_stub_ids") or [])+[parent["stub_id"]], missing_measurements=missing_measurements)
-def correlate_pair(a,b,*,max_tick_lag=10**9):
-    validate_record(a); validate_record(b)
-    lag=abs(int(a["logical_tick"])-int(b["logical_tick"])); insuf=lag>max_tick_lag
-    va,vb=a.get("residual_vector"),b.get("residual_vector")
-    ok=isinstance(va,list) and isinstance(vb,list) and len(va)==len(vb)>0
-    dist=math.sqrt(sum((float(va[i])-float(vb[i]))**2 for i in range(len(va)))) if ok and not insuf else None
-    result={"schema_version":"scandoc-counter-symbol-correlation/0.1","kind":"experimental_correlation","input_stub_ids":[a["stub_id"],b["stub_id"]],"input_commitments":[a["commitment"],b["commitment"]],"tick_lag":lag,"insufficient_observations":insuf,"residual_compatible":ok,"residual_distance":dist,"topology_version_match":a.get("topology_commitment") is not None and a.get("topology_commitment")==b.get("topology_commitment"),"shared_related_stub_ids":sorted(set(a.get("related_stub_ids") or [])&set(b.get("related_stub_ids") or [])),"missing_data_present":bool(a.get("missing_measurements") or b.get("missing_measurements")),"causation_claimed":False,"invariant_claimed":False,"live_gate":"CLOSED","sphere_writes":False,"evidence_status":"UNVERIFIED"}
-    result["commitment"]=hashlib.sha512(json.dumps(result,sort_keys=True,separators=(",",":")).encode()).hexdigest(); return result
-def write_example_records(out_dir):
-    out_dir=Path(out_dir); out_dir.mkdir(parents=True, exist_ok=True); ids=[]
-    r1=build_counter_symbol(stub_id="cs-synthetic-001", residual_vector=[0.1,-0.2,0.05], missing_measurements=[{"name":"post_separation_sample","missing_reason":"not_acquired"}], related_stub_ids=["stub_phi01"], reserved_future_fields=["quantum_slot_v1"])
-    (out_dir/f"{r1['stub_id']}.json").write_text(json.dumps(r1,indent=2)+"\n"); ids.append(r1["stub_id"])
-    r2=append_observation(r1, new_stub_id="cs-synthetic-001-b", residual_type="rejected_transition", residual_vector=[0.1,-0.2,0.06])
-    (out_dir/f"{r2['stub_id']}.json").write_text(json.dumps(r2,indent=2)+"\n"); ids.append(r2["stub_id"])
-    r3=build_counter_symbol(stub_id="cs-synthetic-missing-only", residual_type="missing_measurement", residual_vector=None, missing_measurements=[{"name":"leg_median","missing_reason":"six_leg_separation_not_run"}], evidence_status="INCOMPLETE")
-    (out_dir/f"{r3['stub_id']}.json").write_text(json.dumps(r3,indent=2)+"\n"); ids.append(r3["stub_id"]); return ids
-def main():
-    p=argparse.ArgumentParser(); p.add_argument("--write-examples",default=""); p.add_argument("--validate",default=""); a=p.parse_args()
-    if a.write_examples: print("wrote", write_example_records(Path(a.write_examples)))
-    if a.validate:
-        d=json.loads(Path(a.validate).read_text()); validate_record(d); print("OK", d["stub_id"], d["live_gate"])
-if __name__=="__main__": main()
+    if stub_id == parent["stub_id"]:
+        raise ValueError("an observation requires a new stub_id")
+    record = copy.deepcopy(parent)
+    record.update(copy.deepcopy(observation))
+    record.update(
+        stub_id=stub_id, logical_tick=logical_tick,
+        parent_commitment=parent["commitment"],
+    )
+    record["commitment"] = compute_commitment(record)
+    validate_record(record)
+    if logical_tick < parent["logical_tick"]:
+        raise ValueError("an observation cannot precede its parent logical_tick")
+    if not {"stub_id", "logical_tick", "parent_commitment"}.issubset(
+        record.get("commitment_fields", COMMITMENT_FIELDS)
+    ):
+        raise ValueError("observations must commit their identity, tick, and parent link")
+    if record["commitment"] == parent["commitment"]:
+        raise ValueError("an observation must have a new commitment")
+    return record
+
+
+def daemon_gate_allows_activation(*args, **kwargs) -> bool:
+    """Research records never grant activation, regardless of their contents."""
+    return False
+
+
+def correlate_pair(left: dict, right: dict) -> dict:
+    """Describe experimental similarity only, never causation or invariants."""
+    validate_record(left)
+    validate_record(right)
+    a, b = left.get("residual_vector"), right.get("residual_vector")
+    distance = None
+    if a and b and len(a) == len(b):
+        try:
+            candidate = math.dist(a, b)
+            if math.isfinite(candidate):
+                distance = candidate
+        except OverflowError:
+            pass
+    topology_a = left.get("topology_commitment")
+    topology_b = right.get("topology_commitment")
+    return {
+        "experimental": True,
+        "status": "insufficient_data" if distance is None else "experimental",
+        "tick_lag": right["logical_tick"] - left["logical_tick"],
+        "residual_distance": distance,
+        "topology_match": (
+            topology_a == topology_b
+            if topology_a is not None and topology_b is not None else None
+        ),
+        "source_modalities": [left["source_modality"], right["source_modality"]],
+        "observed_pair": (
+            left["source_modality"] == right["source_modality"] == "observed_classical"
+        ),
+        "causation_claim": False,
+        "invariant_claim": False,
+        "live_gate": "CLOSED",
+        "sphere_writes": False,
+    }
+
+
+def write_examples(directory: Path) -> None:
+    """Write deterministic synthetic examples without overwriting history."""
+    first = build_counter_symbol(
+        "cs-synthetic-001", residual_vector=[0.25, -0.5, 0.125],
+        topology_commitment="synthetic-topology",
+    )
+    rejected = append_observation(
+        first, "cs-synthetic-002", 1, residual_type="rejected_transition",
+        residual_vector=[0.5, -0.25, 0.125], evidence_status="REJECTED",
+    )
+    missing = append_observation(
+        rejected, "cs-synthetic-003", 2, residual_type="missing_measurement",
+        residual_vector=None, evidence_status="INCOMPLETE",
+        missing_measurements=[{
+            "name": "residual_vector", "missing_reason": "synthetic sensor unavailable",
+            "slot": "tick-2",
+        }],
+    )
+    directory.mkdir(parents=True, exist_ok=True)
+    for record in (first, rejected, missing):
+        path = directory / f"{record['stub_id']}.json"
+        content = json.dumps(record, indent=2, ensure_ascii=False, allow_nan=False) + "\n"
+        if path.exists():
+            if path.read_text(encoding="utf-8") != content:
+                raise ValueError(f"refusing to rewrite historical record: {path}")
+        else:
+            with path.open("x", encoding="utf-8") as stream:
+                stream.write(content)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    commands = parser.add_mutually_exclusive_group(required=True)
+    commands.add_argument("--write-examples", type=Path, metavar="DIRECTORY")
+    commands.add_argument("--validate", type=Path, metavar="FILE")
+    args = parser.parse_args()
+    try:
+        if args.write_examples is not None:
+            write_examples(args.write_examples)
+            print("Wrote three synthetic examples (live_gate=CLOSED, sphere_writes=false)")
+        else:
+            validate_record(json.loads(args.validate.read_text(encoding="utf-8")))
+            print(f"VALID: {args.validate}")
+    except (OSError, ValueError) as error:
+        print(f"ERROR: {error}")
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
