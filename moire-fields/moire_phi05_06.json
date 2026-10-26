@@ -1,0 +1,85 @@
+{
+  "id": "moire_phi05_06",
+  "kind": "moire_field",
+  "version": 1,
+  "rule_version": "scandoc-moire-invariants/v1",
+  "params": {
+    "drift_delta_order": "first_minus_second",
+    "gate_xor_hex_length": 32,
+    "pair_residue_energy": "sum_squared_consecutive_pair_residues"
+  },
+  "inputs": [
+    "stub_phi05",
+    "stub_phi06"
+  ],
+  "input_seeds": [
+    {
+      "phi": [
+        10,
+        15,
+        3,
+        3,
+        4,
+        5,
+        7
+      ],
+      "gate_burn": "422cd54d4576a3b6b12e5d35c70ad3bd",
+      "detune_drift_vector": [
+        -0.01811737,
+        -0.04987043,
+        0.00025988
+      ],
+      "invariant_residue": "d0dbe13738d1fe00bd081235"
+    },
+    {
+      "phi": [
+        13,
+        1,
+        1,
+        2,
+        3,
+        5,
+        8
+      ],
+      "gate_burn": "2d1ffb48f8046132c68bb23ae580cd9b",
+      "detune_drift_vector": [
+        -0.05769491,
+        -0.0446547,
+        0.00023394
+      ],
+      "invariant_residue": "9137134133e1e7ec7edda948"
+    }
+  ],
+  "overlap_phi": [
+    10,
+    1,
+    1,
+    2,
+    3,
+    5,
+    7
+  ],
+  "residue_phi": [
+    3,
+    14,
+    2,
+    1,
+    1,
+    0,
+    1
+  ],
+  "drift_mean": [
+    -0.037906140000000005,
+    -0.047262565,
+    0.00024691
+  ],
+  "drift_delta": [
+    0.03957754,
+    -0.005215730000000002,
+    2.5939999999999985e-05
+  ],
+  "gate_xor": "6f332e05bd72c28477a5ef0f228a1e26",
+  "completeness": "intentionally_incomplete",
+  "semantic_payload": null,
+  "sentinel": "fa538b99485c9dea8afc0f1cf5bf1b7e0cf288cab9c25db694623a1c2f8fb98ab0b93fdef08af084035081ad1d9fc5e5572696e461c295733d1fe0628a55592f"
+}

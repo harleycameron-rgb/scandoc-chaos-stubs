@@ -1,0 +1,21 @@
+{
+  "module": "B",
+  "rule_version": "scandoc-moire-invariants/v1",
+  "count": 7,
+  "ids": [
+    "moire_phi01_02",
+    "moire_phi03_04",
+    "moire_phi05_06",
+    "moire_phi07_08",
+    "moire_phi09_10",
+    "moire_phi11_12",
+    "moire_full_set"
+  ],
+  "params_default": {
+    "drift_delta_order": "first_minus_second",
+    "gate_xor_hex_length": 32,
+    "pair_residue_energy": "sum_squared_consecutive_pair_residues"
+  },
+  "semantic_payload_policy": "always_null",
+  "sentinel": "efd28c827d0c6732a05e877687e0999eafdefb8a945bb8f9d84238fbf70d26d70a88b6deb377cf81cbff113d9d3873930c5c01b751f5c2ea4a013ce94ee8e5dc"
+}

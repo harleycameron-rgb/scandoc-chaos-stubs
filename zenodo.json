@@ -1,0 +1,13 @@
+{
+  "title": "SCANDOC Chaos Stubs — Modules A/B/C + Counter-Symbol v0.1",
+  "upload_type": "software",
+  "description": "Sealed interference stubs, moiré fields, detune records, silhouette/geometry snapshots, and Counter-Symbol residual research records. Live gates CLOSED. Sphere writes false.",
+  "creators": [{"name": "Cameron, Harley"}],
+  "keywords": ["scandoc", "chaos-stub", "moire", "detune", "counter-symbol"],
+  "license": "other-open",
+  "related_identifiers": [{
+    "identifier": "https://github.com/harleycameron-rgb/scandoc-chaos-stubs",
+    "relation": "isSupplementTo",
+    "resource_type": "software"
+  }]
+}

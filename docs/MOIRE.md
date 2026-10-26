@@ -29,6 +29,28 @@ These are **structural** combinations only — not claims of physical optics or 
 
 Consecutive pairs: `(01,02), (03,04), … (11,12)` plus one full-set summary field over all 12.
 
+### Pinned calculations and sealed format
+
+Pair ids are `moire_phi01_02` through `moire_phi11_12`. Each field contains
+ordered `inputs` (stub ids), a corresponding `input_seeds` snapshot copied
+from the existing stubs, and `params` pinning these conventions:
+
+- `drift_delta` is the first drift vector minus the second.
+- `gate_xor` is the XOR of the two 32-digit hexadecimal `gate_burn` values,
+  zero-padded to 32 lowercase digits (the existing burns are already truncated).
+- `moire_full_set.mean_phi` and `mean_drift` are element-wise arithmetic means
+  over all twelve inputs.
+- `pair_residue_energy` is a scalar: the sum of squared φ differences across
+  all seven components of each of the six consecutive pairs.
+
+Fields and `manifest.json` use SHA-512 over UTF-8 canonical JSON with
+`sentinel` set to `""`, sorted keys, compact separators, and `ensure_ascii=False`.
+Generation validates the existing stub seals and requires exactly inputs 01–12;
+it never creates stubs. Verification recomputes the quantities from the embedded
+seeds, checks the pinned metadata and seals, and, for a directory, also requires
+the sealed manifest, all seven fields, and consistent pair/full-set inputs.
+Verification is structural, not a signature or external provenance guarantee.
+
 ## Commands
 
 ```bash
