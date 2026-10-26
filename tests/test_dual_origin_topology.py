@@ -1,9 +1,8 @@
 """Negative/positive tests for the research-only historical comparison topology."""
 import copy
-import math
 import unittest
 from src.dual_origin_topology import (
-    FIELDS, REFERENCES, compare_model, digest, topology, validate_topology,
+    FIELDS, REFERENCES, compare_model, topology, validate_topology,
 )
 
 
@@ -55,6 +54,10 @@ class DualOriginTests(unittest.TestCase):
         self.assertEqual(result["A_1932"]["categorical_overlap"], 1.0)
         self.assertEqual(result["B_1938"]["categorical_overlap"], 0.0)
         self.assertEqual(result["OMEGA"]["status"], "indeterminate")
+        # three of four schema slots supplied
+        self.assertEqual(result["A_1932"]["fields_compared"], 3)
+        self.assertEqual(result["A_1932"]["fields_missing"], ["technology"])
+        self.assertEqual(result["A_1932"]["coverage"], 0.75)
 
     def test_missing_inputs_are_indeterminate(self):
         candidate = self.example()
@@ -62,6 +65,16 @@ class DualOriginTests(unittest.TestCase):
         result = compare_model(candidate)["payload"]["comparisons"]
         self.assertIsNone(result["A_1932"]["categorical_overlap"])
         self.assertEqual(result["A_1932"]["status"], "insufficient_data")
+        self.assertEqual(result["A_1932"]["coverage"], 0.0)
+        self.assertEqual(result["A_1932"]["fields_missing"], list(FIELDS))
+
+    def test_full_coverage_reported(self):
+        c = self.example()
+        c["features"]["technology"] = "charged_particle_accelerator"
+        result = compare_model(c)["payload"]["comparisons"]["A_1932"]
+        self.assertEqual(result["coverage"], 1.0)
+        self.assertEqual(result["fields_missing"], [])
+        self.assertEqual(result["categorical_overlap"], 1.0)
 
     def test_missing_observational_evidence_rejected(self):
         c = self.example()

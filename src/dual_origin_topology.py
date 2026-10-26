@@ -89,10 +89,12 @@ def compare_model(model):
     """Categorical overlap; not quantitative physics or proof of existence.
 
     model = {"id": str, "modality": VALID_MODES member,
-             "features": {name: one of the pinned feature strings},
+             "features": {name: categorical string in FIELDS slots},
              "evidence_refs": [nonempty identifiers or URLs]}
-    Features must be separately justified by evidence. The overlap fraction
-    is only a count of declared categorical matches (not a metric distance).
+
+    categorical_overlap = matches / fields_compared among *supplied* slots only.
+    coverage = fields_compared / len(FIELDS) so partial inputs cannot be read
+    as a full-schema agreement. Descriptive annotation only — not a metric.
     """
     if not isinstance(model, dict) or set(model) != {
             "id", "modality", "features", "evidence_refs"}:
@@ -111,6 +113,11 @@ def compare_model(model):
     if (not isinstance(features, dict) or not set(features) <= set(FIELDS)
             or any(not isinstance(v, str) or not v.strip() for v in features.values())):
         raise ValueError("features must be declared categorical strings")
+
+    fields_missing = sorted(f for f in FIELDS if f not in features)
+    fields_compared = len(features)
+    coverage = fields_compared / len(FIELDS)
+
     comparisons = {}
     for key in ("A_1932", "B_1938"):
         reference = REFERENCES[key]["features"]
@@ -119,13 +126,19 @@ def compare_model(model):
             "status": "comparison_only" if matches else "insufficient_data",
             "matching_fields": sorted(k for k, v in matches.items() if v),
             "nonmatching_fields": sorted(k for k, v in matches.items() if not v),
-            "fields_compared": len(matches),
+            "fields_compared": fields_compared,
+            "fields_missing": list(fields_missing),
+            "coverage": coverage,
             "categorical_overlap": (
-                sum(matches.values()) / len(matches) if matches else None
+                sum(matches.values()) / fields_compared if fields_compared else None
             ),
         }
     comparisons["OMEGA"] = {
-        "status": "indeterminate", "reason": "no observed universal reference"
+        "status": "indeterminate",
+        "reason": "no observed universal reference",
+        "fields_compared": fields_compared,
+        "fields_missing": list(fields_missing),
+        "coverage": coverage,
     }
     payload = {
         "schema_version": VERSION, "reference_sha512": topology()["sha512"],
