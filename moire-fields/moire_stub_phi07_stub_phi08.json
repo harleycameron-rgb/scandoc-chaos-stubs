@@ -1,0 +1,16 @@
+{
+  "id": "moire_stub_phi07_stub_phi08",
+  "kind": "moire_field",
+  "version": 1,
+  "rule_version": "scandoc-moire-invariants/v1",
+  "plate": "pair",
+  "input_stub_ids": ["stub_phi07", "stub_phi08"],
+  "overlap_phi": [2.0, 2.0, 3.0, 4.0, 6.0, 9.0, 3.0],
+  "residue_phi": [1.0, 2.0, 2.0, 3.0, 4.0, 6.0, 11.0],
+  "drift_mean": [-0.029437015, -0.072703825, 0.00038433],
+  "drift_delta": [-0.054125070000000004, 0.009320870000000009, -0.00011090000000000004],
+  "gate_xor": "5f4ceadd4840e0c92bb069e1184159f8",
+  "completeness": "intentionally_incomplete",
+  "semantic_payload": null,
+  "sentinel": "7f34f4e1c3693df203ce55b095e2849f8b4c6e2835e9d962c3ceadbdfd4599e4818e97b3edc538d0f0cba17cb92e14d6d1d9e5f7fe9ed4be7844ffbc5293b1ca"
+}
