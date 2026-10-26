@@ -16,7 +16,7 @@ REQUIRED_KEYS = {
     "id", "kind", "version", "rule_version", "outline",
     "completeness", "semantic_payload", "sentinel",
 }
-OPTIONAL_KEYS = {"created_at", "carrier_ref"}
+OPTIONAL_KEYS = {"created_at", "carrier_ref", "geometry"}
 OUTLINE_KEYS = {"motif", "scale", "axes", "residue_mark"}
 
 
@@ -37,7 +37,13 @@ def check_invariants(data: Dict[str, Any]) -> List[Dict[str, Any]]:
         _result("completeness", data.get("completeness") == "intentionally_incomplete"),
         _result("semantic_payload_null", data.get("semantic_payload") is None),
     ]
-    for key in OPTIONAL_KEYS:
+    if "geometry" in data:
+        from verify_geometry_snapshot import check
+        results.append(_result("geometry_snapshot",
+            data.get("id") == "sil_tentacled_geometry_default"
+            and data.get("outline", {}).get("motif") == "tentacled_sphere_geometry"
+            and all(item[1] for item in check(data))))
+    for key in OPTIONAL_KEYS - {"geometry"}:
         results.append(_result(
             key, key not in data or data[key] is None or isinstance(data[key], str)
         ))
@@ -126,7 +132,10 @@ def _verify(path: Path, manifest: bool = False) -> Dict[str, Any]:
         "stored_sentinel": stored,
         "computed_sentinel": computed,
     }
-    report["invariants"] = _check_manifest(data) if manifest else check_invariants(data)
+    try:
+        report["invariants"] = _check_manifest(data) if manifest else check_invariants(data)
+    except (ValueError, TypeError, OverflowError, AttributeError):
+        report["invariants"] = [_result("malformed_record", False)]
     report["upheld"] = report["integrity"]["pass"] and all(
         result["pass"] for result in report["invariants"]
     )
@@ -204,3 +213,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

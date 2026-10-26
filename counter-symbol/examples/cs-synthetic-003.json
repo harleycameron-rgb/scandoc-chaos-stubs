@@ -1,0 +1,43 @@
+{
+  "schema_version": "scandoc-counter-symbol/0.1",
+  "stub_id": "cs-synthetic-003",
+  "source_modality": "synthetic",
+  "parent_commitment": "7e87b91bc255ee1e9112ac82019101e4d9922a38e40eeb9bd529d93a083873e506c0af1eb282321873abfd47bd1834291732c2039507c7509449ddf139bb005e",
+  "sentinel_reference": null,
+  "logical_tick": 2,
+  "timestamp_utc": null,
+  "residual_type": "missing_measurement",
+  "residual_vector": null,
+  "evidence_status": "INCOMPLETE",
+  "topology_commitment": "synthetic-topology",
+  "related_stub_ids": [],
+  "missing_measurements": [
+    {
+      "name": "residual_vector",
+      "missing_reason": "synthetic sensor unavailable",
+      "slot": "tick-2"
+    }
+  ],
+  "reserved_future_fields": [],
+  "live_gate": "CLOSED",
+  "sphere_writes": false,
+  "commitment_fields": [
+    "schema_version",
+    "stub_id",
+    "source_modality",
+    "parent_commitment",
+    "sentinel_reference",
+    "logical_tick",
+    "timestamp_utc",
+    "residual_type",
+    "residual_vector",
+    "evidence_status",
+    "topology_commitment",
+    "related_stub_ids",
+    "missing_measurements",
+    "reserved_future_fields",
+    "live_gate",
+    "sphere_writes"
+  ],
+  "commitment": "6d4a84ee824bfe739f7589656aa8332434dfd4cebce999c71fb06e47c90d4b3bc7eeda0927d4b98fe540a11d27401aaf989dfc15d43988edfe293dad270b9526"
+}

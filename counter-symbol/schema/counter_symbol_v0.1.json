@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "scandoc-counter-symbol/0.1",
+  "title": "Counter-Symbol Chaos Stub",
+  "description": "Optional research residual record. Does not authorise DaemonGate.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "stub_id",
+    "source_modality",
+    "logical_tick",
+    "residual_type",
+    "evidence_status",
+    "live_gate",
+    "sphere_writes",
+    "commitment"
+  ],
+  "properties": {
+    "schema_version": { "const": "scandoc-counter-symbol/0.1" },
+    "stub_id": { "type": "string", "minLength": 1 },
+    "source_modality": {
+      "type": "string",
+      "enum": ["synthetic", "observed_classical", "hypothetical"]
+    },
+    "parent_commitment": { "type": ["string", "null"] },
+    "sentinel_reference": { "type": ["string", "null"] },
+    "logical_tick": { "type": "integer", "minimum": 0 },
+    "timestamp_utc": { "type": ["string", "null"] },
+    "residual_type": {
+      "type": "string",
+      "enum": [
+        "unresolved",
+        "rejected_transition",
+        "post_separation_drift",
+        "interpretation_claim",
+        "missing_measurement"
+      ]
+    },
+    "residual_vector": {
+      "type": ["array", "null"],
+      "items": { "type": "number" }
+    },
+    "evidence_status": {
+      "type": "string",
+      "enum": ["UNVERIFIED", "REJECTED", "INCOMPLETE"]
+    },
+    "topology_commitment": { "type": ["string", "null"] },
+    "related_stub_ids": { "type": "array", "items": { "type": "string" } },
+    "missing_measurements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "missing_reason"],
+        "properties": {
+          "name": { "type": "string" },
+          "missing_reason": { "type": "string" },
+          "slot": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "reserved_future_fields": { "type": "array", "items": { "type": "string" } },
+    "live_gate": { "const": "CLOSED" },
+    "sphere_writes": { "const": false },
+    "commitment": {
+      "type": "string",
+      "minLength": 128,
+      "maxLength": 128,
+      "pattern": "^[0-9a-f]{128}$"
+    },
+    "commitment_fields": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}
